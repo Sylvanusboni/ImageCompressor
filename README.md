@@ -16,13 +16,8 @@ Grâce à l’option `-opt`, il est désormais possible de partir d’une image,
 
 ## Exemple Avant/Après
 
-Avant compression :
-
-Zoro.png
-
-Après compression :
-
-result.png
+![Avant compression](Zoro.png)
+![Avant compression](result.png)
 
 ## Utilisation
 
