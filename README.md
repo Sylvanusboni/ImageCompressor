@@ -1,71 +1,89 @@
 # Image Compressor
 
 ## Description
-**Image Compressor** est une application développée en Haskell qui permet de compresser des images en réduisant leur nombre de couleurs. Ce projet utilise l’algorithme k-means pour regrouper les couleurs et produit des images compressées. Il supporte désormais la lecture et l’écriture directe d’images grâce à **JuicyPixels**.
+
+**Image Compressor** est une application Haskell permettant de compresser des images en réduisant leur nombre de couleurs grâce à l’algorithme k-means. Elle supporte la lecture et l’écriture d’images via **JuicyPixels** et offre une optimisation par parallélisation.
+
+Grâce à l’option `-opt`, il est désormais possible de partir d’une image, d’en compresser les pixels et d’obtenir une nouvelle image compressée en sortie.
 
 ## Fonctionnalités
-- Lecture des pixels depuis un fichier ou directement depuis une image.
-- Compression d’images en regroupant leurs couleurs en `N` clusters via l’algorithme k-means.
-- Optimisation des calculs par parallélisation.
-- Sauvegarde de l’image compressée dans un format pris en charge.
+
+- Lecture des pixels depuis un fichier texte ou directement depuis une image.
+- Compression en regroupant les couleurs en `N` clusters via l’algorithme k-means.
+- Optimisation des calculs grâce à la parallélisation.
+- Sauvegarde de l’image compressée au format d’entrée.
+- **Nouveau** : Possibilité de traiter directement une image et d’en générer une version compressée.
 
 ## Utilisation
+
 ### Commande
+
 ```bash
-./imageCompressor -n N -l L -f F
+./imageCompressor -n N -l L -f F [-opt O]
+```
 
-N : Nombre de couleurs finales souhaitées.
-L : Limite de convergence de l’algorithme.
-F : Chemin vers un fichier contenant les pixels ou une image (PNG, JPEG, etc.).
+### Paramètres
 
-Format d’entrée
+- `N` : Nombre de couleurs finales souhaitées.
+- `L` : Limite de convergence de l’algorithme.
+- `F` : Chemin vers le fichier source (image ou fichier texte).
+- `O` : Option d’exécution (`img` ou `txt`), `txt` par défaut.
 
-    Fichier texte :
-    Contient des lignes au format :
+### Formats supportés en mode image
 
+- PNG, JPEG, Bitmap, GIF, TGA, TIFF, Radiance.
+
+### Formats d’entrée et sortie
+
+#### Mode Texte (`-opt txt` par défaut)
+
+##### Format d’entrée :
+
+Fichier contenant des lignes au format :
+
+```
 (x,y) (r,g,b)
+```
 
 Exemple :
 
-    (0,0) (33,18,109)
-    (1,0) (35,18,109)
+```
+(0,0) (33,18,109)
+(1,0) (35,18,109)
+```
 
-    Image :
-    Format d’image pris en charge par JuicyPixels (e.g., PNG, JPEG). Les pixels sont extraits automatiquement.
+##### Format de sortie :
 
-Format de sortie
+Fichier listant les clusters :
 
-    Clusters :
-    Fichier listant les clusters, par exemple :
+```
+--
+(mean_r, mean_g, mean_b)
+-
+(x1,y1) (r1,g1,b1)
+(x2,y2) (r2,g2,b2)
+--
+...
+```
 
-    --
-    (mean_r, mean_g, mean_b)
-    -
-    (x1,y1) (r1,g1,b1)
-    (x2,y2) (r2,g2,b2)
-    --
-    ...
+#### Mode Image (`-opt img`)
 
-    Image compressée :
-    Image générée avec les couleurs compressées, sauvegardée dans le même format que l’image d’entrée.
+L’image compressée est générée et sauvegardée sous le nom `result.png`.
 
-Bonus
+## Développement
 
-    Lecture/écriture d’images : Lecture des pixels directement depuis une image et écriture de l’image compressée via JuicyPixels.
-    Optimisation par parallélisation : Utilisation de threads pour accélérer le traitement.
+Le projet utilise Stack pour la gestion des dépendances et la compilation.
 
-Développement
+- Version minimale requise : `stack 2.1.3`
+- Outil de build : `hpack` avec un fichier `package.yaml`
 
-Le projet utilise Stack pour la gestion des dépendances et la compilation :
+### Compilation et exécution
 
-    Version minimale : stack 2.1.3
-    Build tool : hpack avec un fichier package.yaml.
-
-Commandes de build et d’exécution
-
-Pour compiler et exécuter le projet :
-
+```bash
 make
-./imageCompressor -n <nombre de couleurs> -l <limite> -f <fichier ou image>
+./imageCompressor -n <nombre de couleurs> -l <limite> -f <fichier> [-opt img]
+```
 
-Auteurs
+## Auteurs
+
+Sylvanus BONI
