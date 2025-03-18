@@ -14,6 +14,16 @@ Grâce à l’option `-opt`, il est désormais possible de partir d’une image,
 - Sauvegarde de l’image compressée au format d’entrée.
 - **Nouveau** : Possibilité de traiter directement une image et d’en générer une version compressée.
 
+## Exemple Avant/Après
+
+Avant compression :
+
+Zoro.png
+
+Après compression :
+
+result.png
+
 ## Utilisation
 
 ### Commande
@@ -87,3 +97,4 @@ make
 ## Auteurs
 
 Sylvanus BONI
+
