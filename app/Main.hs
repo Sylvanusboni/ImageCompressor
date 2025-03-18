@@ -16,7 +16,7 @@ import Error
 import Codec.Picture
 import ConvertImg
 import ModifImg
--- import System.Directory (doesFileExist, removeFile, writeFile)
+import System.Directory (doesFileExist, removeFile)
 
 toPair :: String -> (String, String) -> Bool -> (String, String)
 toPair [] p _ = p
@@ -131,37 +131,36 @@ roundDb x =
     else fromIntegral (floor x)
 
 myFindby :: [String] -> String -> String
+myFindby [] _ = ""
 myFindby (a : b : ls) tofind
     | a == tofind = b
     | otherwise = myFindby ls tofind
 
-main :: IO ()
-main = do
-    eitherImage <- readImage "Zoro.jpg"
+imgMain :: [String] -> IO ()
+imgMain args = do
+    fileExists <- doesFileExist "pixels"
+    if fileExists
+        then removeFile "pixels"
+        else putStr ""
+    eitherImage <- readImage (myFindby args "-f") -- "Zoro.png"
     case eitherImage of
         Left err -> putStrLn $ "Bad loading: " ++ err
         Right dynamicImage -> do
             let image = convertRGB8 dynamicImage
-            args <- getArgs
             let coords = getCoordsAlt 0 0 ((imageWidth image) - 1) ((imageHeight image) - 1)
             writePixels coords (getRGB coords image)
-            bl <- (checkArgs args)
-            if (not (length args == 6) || not bl)
-                then errors else putStr ""
-            file <- readFile "input" --(args !! 5)
-            print file
+            file <- readFile "pixels" --(args !! 5)
             let lst = toFloat (bof (lines file))
             rd <- genList (read (myFindby args "-n")) 0 ((length lst) - 1)
             let c = getCentroids lst rd
             let final = nextGen (rngPixs lst c) c (read (myFindby args "-l"))
-            print final
-            dispLoop (myFst final) (myScd final) 0
+            --dispLoop (myFst final) (myScd final) 0
             let bof = change (myFst final)
             let bof2 = changeBof (myScd final)
             writeImage "result.png" (kImage image bof bof2)
 
-myMain :: [String] -> IO()
-myMain args = do
+txtMain :: [String] -> IO()
+txtMain args = do
     file <- readFile (myFindby args "-f")
     let lst = toFloat (bof (lines file))
     rd <- genList (read (myFindby args "-n")) 0 ((length lst) - 1)
@@ -169,10 +168,13 @@ myMain args = do
     let final = nextGen (rngPixs lst c) c (read (myFindby args "-l"))
     dispLoop (myFst final) (myScd final) 0
 
-
-{-main :: IO()
+main :: IO()
 main = do
     args <- getArgs
     bl <- (checkArgs args)
-    if (not (length args == 6) || not bl)
-        then errors else myMain args-}
+    if ((length args < 6) || not bl)
+        then errorsCase
+        else putStr ""
+    if (bl && (myFindby args "-opt") == "img")
+        then imgMain args
+        else txtMain args
