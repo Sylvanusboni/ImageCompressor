@@ -34,6 +34,7 @@ library
   build-depends:
       JuicyPixels
     , base >=4.7 && <5
+    , directory
     , random
   default-language: Haskell2010
 
@@ -53,6 +54,7 @@ executable Compressor-exe
       Compressor
     , JuicyPixels
     , base >=4.7 && <5
+    , directory
     , random
   default-language: Haskell2010
 
@@ -70,5 +72,6 @@ test-suite Compressor-test
       Compressor
     , JuicyPixels
     , base >=4.7 && <5
+    , directory
     , random
   default-language: Haskell2010
