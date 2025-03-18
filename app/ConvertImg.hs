@@ -32,5 +32,5 @@ getRGB (l : ls) image =
 writePixels :: [(Int, Int)] -> [(Word8, Word8, Word8)] -> IO()
 writePixels [] _ = putStr ""
 writePixels (l : ls) (x : xs) =
-    appendFile "input" ((show l) ++ " " ++ (show x) ++ "\n")
+    appendFile "pixels" ((show l) ++ " " ++ (show x) ++ "\n")
     >> writePixels ls xs
